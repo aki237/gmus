@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"net"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -25,7 +27,15 @@ type cmusSocket struct {
 }
 
 func newCmusSocket() (*cmusSocket, error) {
-	conn, err := net.Dial("unix", "/run/user/1000/cmus-socket")
+	sockpath := os.Getenv("CMUS_SOCKET")
+	if sockpath == "" {
+		sockpath = os.Getenv("XDG_RUNTIME_DIR")
+		if sockpath == "" {
+			return nil, errors.New("cannot determine the cmus socket path")
+		}
+		sockpath = filepath.Join(sockpath, "cmus-socket")
+	}
+	conn, err := net.Dial("unix", sockpath)
 	if err != nil {
 		return nil, err
 	}
