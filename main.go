@@ -134,7 +134,7 @@ func main() {
 			}
 		}
 
-		if c.DynamicBG {
+		if c.DynamicBG && img != nil {
 			clr := imageBaseColor(img)
 			renderer.SetDrawColor(clr.R, clr.G, clr.B, 255)
 			if clr.IsDark() {

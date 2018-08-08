@@ -7,6 +7,10 @@ import (
 )
 
 func imageBaseColor(img image.Image) *colors.RGBColor {
+	if img == nil {
+		clr, _ := colors.RGB(0, 0, 0)
+		return clr
+	}
 	var R, G, B, A float64
 
 	for y := 0; y < img.Bounds().Dy(); y++ {
