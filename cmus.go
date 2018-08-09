@@ -43,6 +43,26 @@ func newCmusSocket() (*cmusSocket, error) {
 	return &cmusSocket{conn: conn}, nil
 }
 
+func (c *cmusSocket) VolUp() bool {
+	fmt.Fprint(c.conn, "vol +1%\n")
+	p := make([]byte, 1)
+	c.conn.Read(p)
+	if p[0] != '\n' {
+		return false
+	}
+	return true
+}
+
+func (c *cmusSocket) VolDown() bool {
+	fmt.Fprint(c.conn, "vol -1%\n")
+	p := make([]byte, 1)
+	c.conn.Read(p)
+	if p[0] != '\n' {
+		return false
+	}
+	return true
+}
+
 func (c *cmusSocket) Seek(second int) bool {
 	fmt.Fprintf(c.conn, "seek %d\n", second)
 	p := make([]byte, 1)
